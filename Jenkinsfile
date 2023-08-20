@@ -5,7 +5,7 @@ pipeline {
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
-  stages { 'SCM Checkout') {
+  stages {'SCM Checkout') {
     git 'https://github.com/train4aws/Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s'
     stage('Build and Test') {
       steps {
