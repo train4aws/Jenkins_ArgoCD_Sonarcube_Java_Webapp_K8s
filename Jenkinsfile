@@ -6,6 +6,9 @@ pipeline {
     }
   }
   stages {
+    stage('SCM Checkout'){
+       git https://github.com/train4aws/Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s
+         }
     stage('Compile-Package and Build and Test') {
       steps {
         // Get maven home path
