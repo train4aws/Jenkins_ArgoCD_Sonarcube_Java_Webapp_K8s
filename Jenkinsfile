@@ -1,6 +1,7 @@
 pipeline {
-  any agent {
-
+  agent {
+    any {
+      
   tools {
         jdk 'jdk11'
         maven 'maven3'
@@ -16,10 +17,14 @@ pipeline {
     }
   }
   stages {
-    stage('Build and Test') {
-      steps {
-        // build the project and create a JAR file
-        sh 'mvn clean package'
+    stage('SCM Checkout') {
+     git https://github.com/train4aws/Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s
+   }
+   stage('Compile-Package) {
+      // Get maven home path
+      def mvnHome = tool name: 'maven', type: 'maven'
+      sh "{$mvnHome}/bin/mvn package"
+
       }
     }
     stage('Code Analysis with SonarQube') {
