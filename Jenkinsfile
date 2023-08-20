@@ -1,6 +1,16 @@
 pipeline {
-  agent {
-    docker {
+  any agent {
+
+  tools {
+        jdk 'jdk11'
+        maven 'maven3'
+    }
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+        PROJECT_NAME = 'Netflix-Website' // Define the project name here
+    }
+
       image 'chaitannyaa/maven-plus-docker'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
