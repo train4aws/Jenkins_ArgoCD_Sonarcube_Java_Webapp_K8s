@@ -9,7 +9,8 @@ pipeline {
     stage('Build and Test') {
       steps {
         // build the project and create a JAR file
-        sh 'mvn package'
+        def mvnHome = tool name: 'maven', type: 'maven'
+        sh "${mvnHome}/bin/mvn package"
       }
     }
     stage('Code Analysis with SonarQube') {
