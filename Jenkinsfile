@@ -1,30 +1,15 @@
 pipeline {
   agent {
-    any {
-      
-  tools {
-        jdk 'jdk11'
-        maven 'maven3'
-    }
-
-    environment {
-        SCANNER_HOME = tool 'sonar-scanner'
-        PROJECT_NAME = 'Netflix-Website' // Define the project name here
-    }
-
+    docker {
       image 'chaitannyaa/maven-plus-docker'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
   stages {
-    stage('SCM Checkout') {
-     git https://github.com/train4aws/Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s
-   }
-   stage('Compile-Package') {
-      // Get maven home path
-      def mvnHome = tool name: 'maven', type: 'maven'
-      sh "{$mvnHome}/bin/mvn package"
-
+    stage('Build and Test') {
+      steps {
+        // build the project and create a JAR file
+        sh 'mvn clean package'
       }
     }
     stage('Code Analysis with SonarQube') {
@@ -55,13 +40,13 @@ pipeline {
     stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s"
-            GIT_USER_NAME = "Dheeman"
+            GIT_USER_NAME = "train4aws"
         }
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                    git config user.email "dheeman2912@gmail.com"
-                    git config user.name "Dheeman Das"
+                    git config user.email "train4aws@gmail.com"
+                    git config user.name "train4aws"
                     BUILD_NUMBER=${BUILD_NUMBER}
                     sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yml
                     git add manifests/deployment.yml
