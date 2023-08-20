@@ -6,19 +6,15 @@ pipeline {
     }
   }
   stages {
-    stage('SCM Checkout'){
-       git https://github.com/train4aws/Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s
-         }
-    stage('Compile-Package and Build and Test') {
+    stage('Build and Test') {
       steps {
-        // Get maven home path
-        def mvnHome = tool name: 'maven', type: 'maven'
+        // build the project and create a JAR file
         sh "{$mvnHome}/bin/mvn package"
       }
     }
     stage('Code Analysis with SonarQube') {
       environment {
-        SONAR_URL = "http://http://3.92.134.234:9000"
+        SONAR_URL = "http://3.92.134.234:9000"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -44,13 +40,13 @@ pipeline {
     stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s"
-            GIT_USER_NAME = "train4aws"
+            GIT_USER_NAME = "Dheeman"
         }
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
                     git config user.email "train4aws@gmail.com"
-                    git config user.name "train4aws"
+                    git config user.name "Dheeman Das"
                     BUILD_NUMBER=${BUILD_NUMBER}
                     sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yml
                     git add manifests/deployment.yml
