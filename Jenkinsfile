@@ -6,10 +6,11 @@ pipeline {
     }
   }
   stages {
-    stage('Build and Test') {
+    stage('Compile-Package and Build and Test') {
       steps {
-        // build the project and create a JAR file
-        sh 'mvn clean package'
+        // Get maven home path
+        def mvnHome = tool name: 'maven', type: 'maven'
+        sh "{$mvnHome}/bin/mvn package"
       }
     }
     stage('Code Analysis with SonarQube') {
