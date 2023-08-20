@@ -14,7 +14,7 @@ pipeline {
     }
     stage('Code Analysis with SonarQube') {
       environment {
-        SONAR_URL = "http://20.204.61.50:9000"
+        SONAR_URL = "http://http://3.92.134.234:9000"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -45,8 +45,8 @@ pipeline {
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                    git config user.email "dheeman2912@gmail.com"
-                    git config user.name "Dheeman Das"
+                    git config user.email "train4aws@gmail.com"
+                    git config user.name "train4aws"
                     BUILD_NUMBER=${BUILD_NUMBER}
                     sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yml
                     git add manifests/deployment.yml
