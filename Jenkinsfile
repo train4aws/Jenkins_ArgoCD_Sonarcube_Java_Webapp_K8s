@@ -9,7 +9,7 @@ pipeline {
     stage('Build and Test') {
       steps {
         // build the project and create a JAR file
-        sh 'mvn clean package'
+        sh 'mvn package'
       }
     }
     stage('Code Analysis with SonarQube') {
